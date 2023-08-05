@@ -11,24 +11,24 @@ public class Day2Tests {
   @Test
   public void example1() throws IOException {
     List<String> lines = getExampleText("day2");
-    assertEquals(-1, Day2.Part1(lines));
+    assertEquals(2, Day2.Part1(lines));
   }
 
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("day2");
-    assertEquals(-1, Day2.Part1(lines));
+    assertEquals(506, Day2.Part1(lines));
   }
 
   @Test
   public void example2() throws IOException {
     List<String> lines = getExampleText("day2");
-    assertEquals(-1, Day2.Part2(lines));
+    assertEquals(1, Day2.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("day2");
-    assertEquals(-1, Day2.Part2(lines));
+    assertEquals(443, Day2.Part2(lines));
   }
 }
