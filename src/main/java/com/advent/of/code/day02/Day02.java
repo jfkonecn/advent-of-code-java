@@ -1,7 +1,6 @@
-package com.advent.of.code.day1;
+package com.advent.of.code.day02;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 class PasswordRecord {
   private int min;
@@ -50,7 +49,7 @@ class PasswordRecord {
   }
 }
 
-public class Day2 {
+public class Day02 {
   public static long Part1(List<String> input) {
 
     return input.stream()

@@ -1,9 +1,9 @@
-package com.advent.of.code.day1;
+package com.advent.of.code.day01;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Day1 {
+public class Day01 {
   public static int Part1(List<String> input) {
     List<Integer> numbers = input.stream()
                                 .mapToInt(Integer::parseInt)
