@@ -1,4 +1,5 @@
 package com.advent.of.code.day04;
+import static com.advent.of.code.Helpers.getExample2Text;
 import static com.advent.of.code.Helpers.getExampleText;
 import static com.advent.of.code.Helpers.getRealText;
 import static org.junit.Assert.assertEquals;
@@ -22,12 +23,13 @@ public class Day04Tests {
 
   @Test
   public void example2() throws IOException, Exception {
-    List<String> lines = getExampleText("day04");
-    assertEquals(0L, Day04.Part2(lines));
+    List<String> lines = getExample2Text("day04");
+    assertEquals(4L, Day04.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException, Exception {
+    // 226 is too high
     List<String> lines = getRealText("day04");
     assertEquals(0L, Day04.Part2(lines));
   }

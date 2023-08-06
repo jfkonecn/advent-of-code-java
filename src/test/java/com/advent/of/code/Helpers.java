@@ -17,4 +17,10 @@ public class Helpers {
     return Files.readAllLines(
         Paths.get("target", "test-classes", day, "real.txt"));
   }
+
+  public static List<String> getExample2Text(String day) throws IOException {
+
+    return Files.readAllLines(
+        Paths.get("target", "test-classes", day, "example2.txt"));
+  }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 enum Length {
-  linches,
+  inches,
   centimeters,
 }
 
@@ -116,23 +116,27 @@ class Passport {
             }
 
             private static Pattern hairColorPattern =
-                Pattern.compile("^#[\\d\\w]{6}$");
+                Pattern.compile("^#[\\da-f]{6}$");
             private static Pattern passportIdPattern =
                 Pattern.compile("^[\\d]{9}$");
 
             public boolean isValidPart2() {
-              boolean birthYearIsValid = 1920 <= birthYear && birthYear <= 2002;
-              boolean issueYearIsValid = 2010 <= issueYear && issueYear <= 2020;
-              boolean expirationYearIsValid =
-                  2020 <= expirationYear && expirationYear <= 2030;
-              boolean heightIsValid = height.isValid();
+              boolean birthYearIsValid =
+                  birthYear != null && 1920 <= birthYear && birthYear <= 2002;
+              boolean issueYearIsValid =
+                  issueYear != null && 2010 <= issueYear && issueYear <= 2020;
+              boolean expirationYearIsValid = expirationYear != null &&
+                                              2020 <= expirationYear &&
+                                              expirationYear <= 2030;
+              boolean heightIsValid = height != null && height.isValid();
               boolean hairColorIsValid =
+                  hairColor != null &&
                   hairColorPattern.matcher(hairColor).matches();
-              boolean eyeColorIsValid = switch (eyeColor) {
+              boolean eyeColorIsValid = eyeColor != null && switch (eyeColor) {
                   case "amb", "blu", "brn", "gry", "grn", "hzl", "oth" -> true;
                   default -> false;
               };
-              boolean passportIdIsValid = passportIdPattern.matcher(passportId).matches();
+              boolean passportIdIsValid = passportId != null && passportIdPattern.matcher(passportId).matches();
               boolean countryIdIsValid = true;
               return birthYearIsValid && issueYearIsValid &&
                   expirationYearIsValid && heightIsValid && hairColorIsValid &&
