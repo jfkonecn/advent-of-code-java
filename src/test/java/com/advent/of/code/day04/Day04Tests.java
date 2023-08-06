@@ -29,8 +29,7 @@ public class Day04Tests {
 
   @Test
   public void real2() throws IOException, Exception {
-    // 226 is too high
     List<String> lines = getRealText("day04");
-    assertEquals(0L, Day04.Part2(lines));
+    assertEquals(224L, Day04.Part2(lines));
   }
 }

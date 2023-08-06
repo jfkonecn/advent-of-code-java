@@ -31,7 +31,15 @@ class Height {
   }
 
   public boolean isValid() {
-      return value != null && this.unit != null;
+      if ( value != null && this.unit != null) {
+          if (this.unit == Length.centimeters) {
+              return 150 <= this.value && this.value <= 193;
+          } else {
+              return 59 <= this.value && this.value <= 76;
+          }
+      } else {
+          return false;
+      }
   }
 
 
