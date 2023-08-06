@@ -2,9 +2,10 @@ package com.advent.of.code.day04;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 enum Length {
-  inches,
+  linches,
   centimeters,
 }
 
@@ -27,6 +28,10 @@ class Height {
             case "cm" -> Length.centimeters;
             default -> null;
         };
+  }
+
+  public boolean isValid() {
+      return value != null && this.unit != null;
   }
 
 
@@ -110,11 +115,28 @@ class Passport {
                        passportId == null);
             }
 
+            private static Pattern hairColorPattern =
+                Pattern.compile("^#[\\d\\w]{6}$");
+            private static Pattern passportIdPattern =
+                Pattern.compile("^[\\d]{9}$");
+
             public boolean isValidPart2() {
-              return !(birthYear == null || issueYear == null ||
-                       expirationYear == null || height == null ||
-                       hairColor == null || eyeColor == null ||
-                       passportId == null);
+              boolean birthYearIsValid = 1920 <= birthYear && birthYear <= 2002;
+              boolean issueYearIsValid = 2010 <= issueYear && issueYear <= 2020;
+              boolean expirationYearIsValid =
+                  2020 <= expirationYear && expirationYear <= 2030;
+              boolean heightIsValid = height.isValid();
+              boolean hairColorIsValid =
+                  hairColorPattern.matcher(hairColor).matches();
+              boolean eyeColorIsValid = switch (eyeColor) {
+                  case "amb", "blu", "brn", "gry", "grn", "hzl", "oth" -> true;
+                  default -> false;
+              };
+              boolean passportIdIsValid = passportIdPattern.matcher(passportId).matches();
+              boolean countryIdIsValid = true;
+              return birthYearIsValid && issueYearIsValid &&
+                  expirationYearIsValid && heightIsValid && hairColorIsValid &&
+                  eyeColorIsValid && passportIdIsValid && countryIdIsValid;
             }
   }
 
