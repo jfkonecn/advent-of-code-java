@@ -13,10 +13,23 @@ class Height {
   public Integer getValue() { return value; }
   private Length unit;
   public Length getUnit() { return unit; }
-  public Height(Integer value, Length unit) {
-    this.value = value;
-    this.unit = unit;
+  public Height(String value) {
+    if (value.length() < 3) {
+      return;
+    }
+    int lastIndex = value.length() - 2;
+    String firstHalf = value.substring(0, lastIndex);
+    String secondHalf = value.substring(lastIndex);
+
+    this.value = Integer.parseInt(firstHalf);
+    this.unit = switch (secondHalf) {
+            case "in" -> Length.inches;
+            case "cm" -> Length.centimeters;
+            default -> null;
+        };
   }
+
+
 }
 
 class Passport {
@@ -32,86 +45,88 @@ class Passport {
   private Passport(String line) {
     String[] parts = line.split(" ");
     for (String part : parts) {
-      String[] rawField = part.split(":");
-      String label = rawField[0];
-      String value = rawField[1];
+                String[] rawField = part.split(":");
+                String label = rawField[0];
+                String value = rawField[1];
 
-      switch (label) {
-      case "byr":
-        birthYear = Integer.parseInt(value);
-        break;
-      case "iyr":
-        issueYear = Integer.parseInt(value);
-        break;
-      case "eyr":
-        expirationYear = Integer.parseInt(value);
-        break;
-      case "hgt":
-        int lastIndex = value.length() - 2;
-        String firstHalf = value.substring(0, lastIndex);
-        String secondHalf = value.substring(lastIndex);
+                switch (label) {
+                case "byr":
+                  birthYear = Integer.parseInt(value);
+                  break;
+                case "iyr":
+                  issueYear = Integer.parseInt(value);
+                  break;
+                case "eyr":
+                  expirationYear = Integer.parseInt(value);
+                  break;
+                case "hgt":
+                  height = new Height(value);
 
-        Integer unitValue = Integer.parseInt(firstHalf);
-        Length unit = switch (secondHalf) {
-            case "in" -> Length.inches;
-            default -> Length.centimeters;
-        };
-        height = new Height(unitValue, unit);
-
-        break;
-      case "hcl":
-              hairColor = value;
-              break;
-            case "ecl":
-              eyeColor = value;
-              break;
-            case "pid":
-              passportId = value;
-              break;
-            case "cid":
-              countryId = value;
-              break;
-            default:
-              break;
-            };
-      }
-    }
-
-    private static Passport createPassport(StringBuilder builder) {
-      Passport passport = new Passport(builder.toString().trim());
-      builder.setLength(0);
-      return passport;
-    }
-
-    public static List<Passport> parse(List<String> input) {
-      StringBuilder builder = new StringBuilder();
-      List<Passport> passports = new ArrayList<>();
-      for (String line : input) {
-            if (line.isEmpty()) {
-              passports.add(createPassport(builder));
-
-            } else {
-              builder.append(" ");
-              builder.append(line);
+                  break;
+                case "hcl":
+                  hairColor = value;
+                  break;
+                case "ecl":
+                  eyeColor = value;
+                  break;
+                case "pid":
+                  passportId = value;
+                  break;
+                case "cid":
+                  countryId = value;
+                  break;
+                default:
+                  break;
+                };
+              }
             }
-      }
-      passports.add(createPassport(builder));
-      return passports;
-    }
 
-    public boolean isValidPart1() {
-      return !(birthYear == null || issueYear == null ||
-               expirationYear == null || height == null || hairColor == null ||
-               eyeColor == null || passportId == null);
-    }
+            private static Passport createPassport(StringBuilder builder) {
+              Passport passport = new Passport(builder.toString().trim());
+              builder.setLength(0);
+              return passport;
+            }
+
+            public static List<Passport> parse(List<String> input) {
+              StringBuilder builder = new StringBuilder();
+              List<Passport> passports = new ArrayList<>();
+              for (String line : input) {
+                if (line.isEmpty()) {
+                  passports.add(createPassport(builder));
+
+                } else {
+                  builder.append(" ");
+                  builder.append(line);
+                }
+              }
+              passports.add(createPassport(builder));
+              return passports;
+            }
+
+            public boolean isValidPart1() {
+              return !(birthYear == null || issueYear == null ||
+                       expirationYear == null || height == null ||
+                       hairColor == null || eyeColor == null ||
+                       passportId == null);
+            }
+
+            public boolean isValidPart2() {
+              return !(birthYear == null || issueYear == null ||
+                       expirationYear == null || height == null ||
+                       hairColor == null || eyeColor == null ||
+                       passportId == null);
+            }
   }
 
   public class Day04 {
 
-    public static long Part1(List<String> input) {
-      List<Passport> passports = Passport.parse(input);
-      return passports.stream().filter(x -> x.isValidPart1()).count();
-    }
+            public static long Part1(List<String> input) {
+              List<Passport> passports = Passport.parse(input);
+              return passports.stream().filter(x -> x.isValidPart1()).count();
+            }
 
-    public static int Part2(List<String> input) { return -1; }
+            public static long Part2(List<String> input) {
+              List<Passport> passports = Passport.parse(input);
+              return passports.stream().filter(x -> x.isValidPart2()).count();
+            }
   }

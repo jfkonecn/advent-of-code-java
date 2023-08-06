@@ -23,12 +23,12 @@ public class Day04Tests {
   @Test
   public void example2() throws IOException, Exception {
     List<String> lines = getExampleText("day04");
-    assertEquals(0, Day04.Part2(lines));
+    assertEquals(0L, Day04.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException, Exception {
     List<String> lines = getRealText("day04");
-    assertEquals(0, Day04.Part2(lines));
+    assertEquals(0L, Day04.Part2(lines));
   }
 }
