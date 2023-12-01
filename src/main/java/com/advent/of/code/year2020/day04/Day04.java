@@ -1,5 +1,6 @@
-package com.advent.of.code.day04;
+package com.advent.of.code.year2020.day04;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 

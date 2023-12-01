@@ -1,4 +1,4 @@
-package com.advent.of.code.day03;
+package com.advent.of.code.year2020.day03;
 
 import java.util.List;
 import java.util.stream.Collectors;

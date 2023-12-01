@@ -6,21 +6,21 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Helpers {
-  public static List<String> getExampleText(String day) throws IOException {
+  public static List<String> getExampleText(String year, String day) throws IOException {
 
     return Files.readAllLines(
-        Paths.get("target", "test-classes", day, "example.txt"));
+        Paths.get("target", "test-classes", year, day, "example.txt"));
   }
 
-  public static List<String> getRealText(String day) throws IOException {
+  public static List<String> getRealText(String year, String day) throws IOException {
 
     return Files.readAllLines(
-        Paths.get("target", "test-classes", day, "real.txt"));
+        Paths.get("target", "test-classes", year, day, "real.txt"));
   }
 
-  public static List<String> getExample2Text(String day) throws IOException {
+  public static List<String> getExample2Text(String year, String day) throws IOException {
 
     return Files.readAllLines(
-        Paths.get("target", "test-classes", day, "example2.txt"));
+        Paths.get("target", "test-classes", year, day, "example2.txt"));
   }
 }
