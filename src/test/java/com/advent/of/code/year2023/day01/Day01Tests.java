@@ -1,6 +1,7 @@
 package com.advent.of.code.year2023.day01;
-import static com.advent.of.code.Helpers.getExampleText;
+
 import static com.advent.of.code.Helpers.getExample2Text;
+import static com.advent.of.code.Helpers.getExampleText;
 import static com.advent.of.code.Helpers.getRealText;
 import static org.junit.Assert.assertEquals;
 
