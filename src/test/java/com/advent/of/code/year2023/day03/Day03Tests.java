@@ -18,19 +18,18 @@ public class Day03Tests {
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("year2023", "day03");
-    // 330744 too low
     assertEquals(540025, Day03.Part1(lines));
   }
 
   @Test
   public void example2() throws IOException {
     List<String> lines = getExampleText("year2023", "day03");
-    assertEquals(0, Day03.Part2(lines));
+    assertEquals(467835, Day03.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day03");
-    assertEquals(0, Day03.Part2(lines));
+    assertEquals(84584891, Day03.Part2(lines));
   }
 }

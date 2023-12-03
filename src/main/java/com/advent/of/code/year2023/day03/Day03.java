@@ -2,8 +2,11 @@ package com.advent.of.code.year2023.day03;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Day03 {
 
@@ -74,6 +77,59 @@ public class Day03 {
   }
 
   public static int Part2(List<String> input) {
-    return 0;
+    var engineSchematic = parseEngineSchematic(input);
+    var gears =
+        engineSchematic.otherCharacters.entrySet().stream()
+            .filter(x -> x.getValue() == '*')
+            .map(x -> x.getKey())
+            .toList();
+
+    var partNumberLookup =
+        engineSchematic.potentialPartNumbers.stream()
+            .flatMap(x -> x.points.stream().map(y -> Map.entry(y, x)))
+            .collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+
+    var gearsNearPartNumbers = new HashMap<Point, Set<PotentialPartNumber>>();
+    for (Point point : gears) {
+      var nearPartNumbers = new HashSet<PotentialPartNumber>();
+      if (partNumberLookup.containsKey(new Point(point.x + 1, point.y))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x + 1, point.y)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x - 1, point.y))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x - 1, point.y)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x, point.y + 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x, point.y + 1)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x, point.y - 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x, point.y - 1)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x - 1, point.y - 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x - 1, point.y - 1)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x + 1, point.y - 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x + 1, point.y - 1)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x - 1, point.y + 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x - 1, point.y + 1)));
+      }
+      if (partNumberLookup.containsKey(new Point(point.x + 1, point.y + 1))) {
+        nearPartNumbers.add(partNumberLookup.get(new Point(point.x + 1, point.y + 1)));
+      }
+      gearsNearPartNumbers.put(point, nearPartNumbers);
+    }
+
+    return gearsNearPartNumbers.entrySet().stream()
+        .filter(x -> x.getValue().size() == 2)
+        .map(
+            x -> {
+              int product = 1;
+              for (var partNumber : x.getValue()) {
+                product *= partNumber.partNumber;
+              }
+              return product;
+            })
+        .mapToInt(Integer::intValue)
+        .sum();
   }
 }
