@@ -1,51 +1,39 @@
 package com.advent.of.code.year2023.day03;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Day03 {
-  private record GameSet(int red, int green, int blue) {}
 
-  private record Game(int id, ArrayList<GameSet> gameSets) {}
+  private record Point(int x, int y) {}
 
-  private static Game parseGame(String input) {
-    var gameSets = new ArrayList<GameSet>();
-    var id = Integer.parseInt(input.substring(input.indexOf(" ") + 1, input.indexOf(":")));
-    var gameSetsStr = input.substring(input.indexOf(":") + 2);
-    for (var gameSetString : gameSetsStr.split("; ")) {
-      var red = 0;
-      var green = 0;
-      var blue = 0;
-      for (var colorStr : gameSetString.split(", ")) {
-        var splitColor = colorStr.split(" ");
-        var total = Integer.parseInt(splitColor[0]);
-        var colorName = splitColor[1];
+  private record EngineSchematic(
+      Map<Point, Integer> potentialPartNumbers, Map<Point, Character> otherCharacters) {}
 
-        if (colorName.equals("red")) {
-          red = total;
-        } else if (colorName.equals("green")) {
-          green = total;
-        } else if (colorName.equals("blue")) {
-          blue = total;
+  private static EngineSchematic parseEngineSchematic(List<String> input) {
+    var potentialPartNumbers = new HashMap<Point, Integer>();
+    var otherCharacters = new HashMap<Point, Character>();
+    for (var line : input) {
+      var charArray = line.toCharArray();
+      for (int i = 0; i < charArray.length; i++) {
+        var c = charArray[i];
+        if (Character.isDigit(c)) {
+          var partNumber = Integer.parseInt(String.valueOf(c));
+          var point = new Point(i, input.indexOf(line));
+          potentialPartNumbers.put(point, partNumber);
+        } else if (c != '.') {
+          var point = new Point(i, input.indexOf(line));
+          otherCharacters.put(point, c);
         }
       }
-      gameSets.add(new GameSet(red, green, blue));
     }
-    return new Game(id, gameSets);
+    return new EngineSchematic(potentialPartNumbers, otherCharacters);
   }
 
   public static int Part1(List<String> input) {
-    return input.stream()
-        .map(x -> parseGame(x))
-        .filter(
-            x -> {
-              var totalRed = x.gameSets().stream().mapToInt(GameSet::red).max().getAsInt();
-              var totalGreen = x.gameSets().stream().mapToInt(GameSet::green).max().getAsInt();
-              var totalBlue = x.gameSets().stream().mapToInt(GameSet::blue).max().getAsInt();
-              return totalRed <= 12 && totalGreen <= 13 && totalBlue <= 14;
-            })
-        .mapToInt(Game::id)
-        .sum();
+    var engineSchematic = parseEngineSchematic(input);
+    return 0;
   }
 
   public static int Part2(List<String> input) {
