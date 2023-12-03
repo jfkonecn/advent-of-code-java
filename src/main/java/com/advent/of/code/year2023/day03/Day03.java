@@ -2,7 +2,6 @@ package com.advent.of.code.year2023.day03;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +50,7 @@ public class Day03 {
 
   public static int Part1(List<String> input) {
     var engineSchematic = parseEngineSchematic(input);
-    var validPartNumbers = new HashSet<Integer>();
+    var validPartNumbers = new ArrayList<Integer>();
     var otherCharacters = engineSchematic.otherCharacters;
     for (var entry : engineSchematic.potentialPartNumbers) {
       var partNumber = entry.partNumber;
@@ -67,6 +66,7 @@ public class Day03 {
             || otherCharacters.containsKey(new Point(point.x + 1, point.y + 1))) {
 
           validPartNumbers.add(partNumber);
+          break;
         }
       }
     }
