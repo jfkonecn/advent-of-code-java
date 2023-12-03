@@ -1,5 +1,6 @@
 package com.advent.of.code.year2023.day03;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +22,17 @@ public class Day03 {
         var c = charArray[j];
         if (Character.isDigit(c)) {
           var sb = new StringBuilder();
+          var points = new ArrayList<Point>();
           while (Character.isDigit(c)) {
+            var point = new Point(j, i);
+            points.add(point);
             sb.append(c);
             c = charArray[++j];
           }
           var partNumber = Integer.parseInt(sb.toString());
-          var point = new Point(j, i);
-          potentialPartNumbers.put(point, partNumber);
+          for (var point : points) {
+            potentialPartNumbers.put(point, partNumber);
+          }
           j--;
         } else if (c != '.') {
           var point = new Point(j, i);
