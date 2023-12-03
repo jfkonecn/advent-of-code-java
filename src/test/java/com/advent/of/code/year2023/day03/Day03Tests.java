@@ -18,6 +18,7 @@ public class Day03Tests {
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("year2023", "day03");
+    // 330744 too low
     assertEquals(0, Day03.Part1(lines));
   }
 

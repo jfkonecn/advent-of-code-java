@@ -10,11 +10,13 @@ public class Day03 {
 
   private record Point(int x, int y) {}
 
+  private record PotentialPartNumber(List<Point> points, int partNumber) {}
+
   private record EngineSchematic(
-      Map<Point, Integer> potentialPartNumbers, Map<Point, Character> otherCharacters) {}
+      List<PotentialPartNumber> potentialPartNumbers, Map<Point, Character> otherCharacters) {}
 
   private static EngineSchematic parseEngineSchematic(List<String> input) {
-    var potentialPartNumbers = new HashMap<Point, Integer>();
+    var potentialPartNumbers = new ArrayList<PotentialPartNumber>();
     var otherCharacters = new HashMap<Point, Character>();
     for (int i = 0; i < input.size(); i++) {
       var line = input.get(i);
@@ -28,12 +30,15 @@ public class Day03 {
             var point = new Point(j, i);
             points.add(point);
             sb.append(c);
-            c = charArray[++j];
+            j++;
+            if (j < charArray.length) {
+              c = charArray[j];
+            } else {
+              break;
+            }
           }
           var partNumber = Integer.parseInt(sb.toString());
-          for (var point : points) {
-            potentialPartNumbers.put(point, partNumber);
-          }
+          potentialPartNumbers.add(new PotentialPartNumber(points, partNumber));
           j--;
         } else if (c != '.') {
           var point = new Point(j, i);
@@ -48,20 +53,21 @@ public class Day03 {
     var engineSchematic = parseEngineSchematic(input);
     var validPartNumbers = new HashSet<Integer>();
     var otherCharacters = engineSchematic.otherCharacters;
-    for (var entry : engineSchematic.potentialPartNumbers.entrySet()) {
-      var point = entry.getKey();
-      var partNumber = entry.getValue();
+    for (var entry : engineSchematic.potentialPartNumbers) {
+      var partNumber = entry.partNumber;
 
-      if (otherCharacters.containsKey(new Point(point.x + 1, point.y))
-          || otherCharacters.containsKey(new Point(point.x - 1, point.y))
-          || otherCharacters.containsKey(new Point(point.x, point.y + 1))
-          || otherCharacters.containsKey(new Point(point.x, point.y - 1))
-          || otherCharacters.containsKey(new Point(point.x - 1, point.y - 1))
-          || otherCharacters.containsKey(new Point(point.x + 1, point.y - 1))
-          || otherCharacters.containsKey(new Point(point.x - 1, point.y + 1))
-          || otherCharacters.containsKey(new Point(point.x + 1, point.y + 1))) {
+      for (var point : entry.points) {
+        if (otherCharacters.containsKey(new Point(point.x + 1, point.y))
+            || otherCharacters.containsKey(new Point(point.x - 1, point.y))
+            || otherCharacters.containsKey(new Point(point.x, point.y + 1))
+            || otherCharacters.containsKey(new Point(point.x, point.y - 1))
+            || otherCharacters.containsKey(new Point(point.x - 1, point.y - 1))
+            || otherCharacters.containsKey(new Point(point.x + 1, point.y - 1))
+            || otherCharacters.containsKey(new Point(point.x - 1, point.y + 1))
+            || otherCharacters.containsKey(new Point(point.x + 1, point.y + 1))) {
 
-        validPartNumbers.add(partNumber);
+          validPartNumbers.add(partNumber);
+        }
       }
     }
     return validPartNumbers.stream().mapToInt(Integer::intValue).sum();
