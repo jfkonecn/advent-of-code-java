@@ -11,25 +11,25 @@ import org.junit.Test;
 public class Day03Tests {
   @Test
   public void example1() throws IOException {
-    List<String> lines = getExampleText("year2023", "day02");
+    List<String> lines = getExampleText("year2023", "day03");
     assertEquals(4361, Day03.Part1(lines));
   }
 
   @Test
   public void real1() throws IOException {
-    List<String> lines = getRealText("year2023", "day02");
+    List<String> lines = getRealText("year2023", "day03");
     assertEquals(0, Day03.Part1(lines));
   }
 
   @Test
   public void example2() throws IOException {
-    List<String> lines = getExampleText("year2023", "day02");
+    List<String> lines = getExampleText("year2023", "day03");
     assertEquals(0, Day03.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException {
-    List<String> lines = getRealText("year2023", "day02");
+    List<String> lines = getRealText("year2023", "day03");
     assertEquals(0, Day03.Part2(lines));
   }
 }
