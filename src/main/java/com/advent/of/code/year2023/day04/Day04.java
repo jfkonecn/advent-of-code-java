@@ -25,16 +25,24 @@ public class Day04 {
   }
 
   public static int Part1(List<String> input) {
-    var temp =
-        input.stream()
-            .map(Day04::parseCard)
-            .filter(
-                x -> {
-                  return true;
-                })
-            .collect(Collectors.toList());
-
-    return 0;
+    return input.stream()
+        .map(Day04::parseCard)
+        .mapToInt(
+            x -> {
+              var winningNumbers = x.winningNumbers;
+              var myNumbers = x.myNumbers;
+              var winningNumbersCount =
+                  winningNumbers.stream()
+                      .filter(y -> myNumbers.stream().anyMatch(z -> z == y))
+                      .count();
+              if (winningNumbersCount > 0) {
+                return (int) Math.pow(2, winningNumbersCount - 1);
+              } else {
+                return 0;
+              }
+            })
+        .sum();
+    // .collect(Collectors.toList());
   }
 
   public static int Part2(List<String> input) {

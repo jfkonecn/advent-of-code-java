@@ -18,7 +18,7 @@ public class Day04Tests {
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("year2023", "day04");
-    assertEquals(0, Day04.Part1(lines));
+    assertEquals(21158, Day04.Part1(lines));
   }
 
   @Test
