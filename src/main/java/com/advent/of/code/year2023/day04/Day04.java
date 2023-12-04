@@ -1,5 +1,6 @@
 package com.advent.of.code.year2023.day04;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,10 +43,33 @@ public class Day04 {
               }
             })
         .sum();
-    // .collect(Collectors.toList());
   }
 
   public static int Part2(List<String> input) {
-    return 0;
+    var winningCounts =
+        input.stream()
+            .map(Day04::parseCard)
+            .map(
+                x -> {
+                  var winningNumbers = x.winningNumbers;
+                  var myNumbers = x.myNumbers;
+                  return (int)
+                      winningNumbers.stream()
+                          .filter(y -> myNumbers.stream().anyMatch(z -> z == y))
+                          .count();
+                })
+            .collect(Collectors.toList());
+    var cardCopies = new int[winningCounts.size()];
+    for (int i = 0; i < winningCounts.size(); i++) {
+      var maxCardCopies = winningCounts.get(i);
+      var totalCopiesForThisCard = cardCopies[i];
+      cardCopies[i] += 1;
+      for (int j = 0; j < totalCopiesForThisCard + 1; j++) {
+        for (int k = i + 1; k < cardCopies.length && k < i + 1 + maxCardCopies; k++) {
+          cardCopies[k] += 1;
+        }
+      }
+    }
+    return Arrays.stream(cardCopies).sum();
   }
 }
