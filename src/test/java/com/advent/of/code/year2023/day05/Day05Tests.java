@@ -24,7 +24,7 @@ public class Day05Tests {
   @Test
   public void example2() throws IOException {
     List<String> lines = getExampleText("year2023", "day05");
-    assertEquals(0, Day05.Part2(lines));
+    assertEquals(46, Day05.Part2(lines));
   }
 
   @Test

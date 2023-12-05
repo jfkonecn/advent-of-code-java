@@ -2,6 +2,7 @@ package com.advent.of.code.year2023.day05;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
@@ -113,7 +114,24 @@ public class Day05 {
     return source.stream().mapToLong(Long::longValue).min().getAsLong();
   }
 
-  public static int Part2(List<String> input) {
-    return 0;
+  public static long Part2(List<String> input) {
+    var seedMap = parseSeedMap(input);
+    var sourceSet = new HashSet<Long>();
+    for (int i = 0; i < seedMap.seeds().size(); i += 2) {
+      var start = seedMap.seeds().get(i);
+      var length = seedMap.seeds().get(i + 1) + start;
+      for (var j = start; j < length; j++) {
+        sourceSet.add(j);
+      }
+    }
+    var source = new ArrayList<>(sourceSet);
+    convert(source, seedMap.seedToSoilConverters());
+    convert(source, seedMap.soilToFertilizerConverters());
+    convert(source, seedMap.fertilizerToWaterConverters());
+    convert(source, seedMap.waterToLightConverters());
+    convert(source, seedMap.lightToTemperatureConverters());
+    convert(source, seedMap.temperatureToHumidityConverters());
+    convert(source, seedMap.humidityToLocationConverters());
+    return source.stream().mapToLong(Long::longValue).min().getAsLong();
   }
 }
