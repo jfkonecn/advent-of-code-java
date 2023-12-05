@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.stream.Collectors;
 
 public class Day05 {
 
   private record Converter(Long sourceStart, Long destinationStart, Long length) {
-    public OptionalLong tryConvert(int source) {
+    public OptionalLong tryConvert(Long source) {
       if (source >= sourceStart && source < sourceStart + length) {
         return OptionalLong.of(destinationStart + (source - sourceStart));
       } else {
@@ -37,8 +38,8 @@ public class Day05 {
         break;
       }
       var parts = line.split(" ");
-      var sourceStart = Long.parseLong(parts[0]);
-      var destinationStart = Long.parseLong(parts[1]);
+      var destinationStart = Long.parseLong(parts[0]);
+      var sourceStart = Long.parseLong(parts[1]);
       var length = Long.parseLong(parts[2]);
       converters.add(new Converter(sourceStart, destinationStart, length));
     }
@@ -47,8 +48,10 @@ public class Day05 {
   }
 
   private static SeedMap parseSeedMap(List<String> input) {
-    List<Long> seeds =
-        Arrays.stream(input.get(0).split(":")[1].trim().split(" ")).map(Long::parseLong).toList();
+    var seeds =
+        Arrays.stream(input.get(0).split(":")[1].trim().split(" "))
+            .map(Long::parseLong)
+            .collect(Collectors.toList());
 
     var i = 3;
     var seedToSoilConvertersPair = parseConverters(i, input);
@@ -84,9 +87,30 @@ public class Day05 {
         humidityToLocationConverters);
   }
 
-  public static int Part1(List<String> input) {
+  private static void convert(List<Long> source, List<Converter> converters) {
+    for (int i = 0; i < source.size(); i++) {
+      var value = source.get(i);
+      for (var converter : converters) {
+        var converted = converter.tryConvert(value);
+        if (converted.isPresent()) {
+          source.set(i, converted.getAsLong());
+          break;
+        }
+      }
+    }
+  }
+
+  public static long Part1(List<String> input) {
     var seedMap = parseSeedMap(input);
-    return 0;
+    var source = new ArrayList<>(seedMap.seeds());
+    convert(source, seedMap.seedToSoilConverters());
+    convert(source, seedMap.soilToFertilizerConverters());
+    convert(source, seedMap.fertilizerToWaterConverters());
+    convert(source, seedMap.waterToLightConverters());
+    convert(source, seedMap.lightToTemperatureConverters());
+    convert(source, seedMap.temperatureToHumidityConverters());
+    convert(source, seedMap.humidityToLocationConverters());
+    return source.stream().mapToLong(Long::longValue).min().getAsLong();
   }
 
   public static int Part2(List<String> input) {
