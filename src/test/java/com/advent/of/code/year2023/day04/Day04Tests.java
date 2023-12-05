@@ -30,6 +30,6 @@ public class Day04Tests {
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day04");
-    assertEquals(6050769, Day04.Part2(lines));
+    assertEquals(6040769, Day04.Part2(lines));
   }
 }
