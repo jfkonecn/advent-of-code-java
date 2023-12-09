@@ -30,7 +30,6 @@ public class Day06Tests {
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day06");
-    // TODO: make big integer
     assertEquals(30125202L, Day06.Part2(lines));
   }
 }

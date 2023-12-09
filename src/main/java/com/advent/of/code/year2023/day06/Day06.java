@@ -1,43 +1,47 @@
 package com.advent.of.code.year2023.day06;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Day06 {
-  private record Race(long time, long distance) {}
+  private record Race(BigDecimal time, BigDecimal distance) {}
 
   private static List<Race> parseRaces1(List<String> input) {
     var times =
         Arrays.stream(input.get(0).replace("Time:", "").trim().replaceAll("\\s+", " ").split(" "))
-            .mapToLong(Long::parseLong)
-            .toArray();
+            .map(x -> new BigDecimal(x))
+            .collect(Collectors.toList());
     var distances =
         Arrays.stream(
                 input.get(1).replace("Distance:", "").trim().replaceAll("\\s+", " ").split(" "))
-            .mapToLong(Long::parseLong)
-            .toArray();
+            .map(x -> new BigDecimal(x))
+            .collect(Collectors.toList());
     var races = new ArrayList<Race>();
-    for (int i = 0; i < times.length; i++) {
-      var race = new Race(times[i], distances[i]);
+    for (int i = 0; i < times.size(); i++) {
+      var race = new Race(times.get(i), distances.get(i));
       races.add(race);
     }
     return races;
   }
 
   private static List<Race> parseRaces2(List<String> input) {
-    var time = Integer.parseInt(input.get(0).replace("Time:", "").trim().replaceAll("\\s+", ""));
+    var time = new BigDecimal(input.get(0).replace("Time:", "").trim().replaceAll("\\s+", ""));
     var distance =
-        Integer.parseInt(input.get(1).replace("Distance:", "").trim().replaceAll("\\s+", ""));
+        new BigDecimal(input.get(1).replace("Distance:", "").trim().replaceAll("\\s+", ""));
     var races = new ArrayList<Race>();
     races.add(new Race(time, distance));
     return races;
   }
 
-  private static Boolean isNotRecord(Race race, long chargeTime) {
+  private static Boolean isNotRecord(Race race, BigDecimal chargeTime) {
     var time = race.time;
-    var distance = time * chargeTime - chargeTime * chargeTime;
-    return race.distance >= distance;
+    var distance = time.multiply(chargeTime).subtract(chargeTime.multiply(chargeTime));
+    return race.distance.compareTo(distance) >= 0;
   }
 
   private static long waysToWin(List<Race> races) {
@@ -45,17 +49,29 @@ public class Day06 {
     for (var race : races) {
       var time = race.time;
       var distance = race.distance;
-      var lowerBound = (long) Math.ceil((time - Math.sqrt(time * time - 4 * distance)) / 2);
-      var higherBound = (long) Math.floor((time + Math.sqrt(time * time - 4 * distance)) / 2);
+      var lowerBound =
+          time.subtract(
+                  time.multiply(time)
+                      .subtract(BigDecimal.valueOf(4).multiply(distance))
+                      .sqrt(new MathContext(100)))
+              .divide(BigDecimal.valueOf(2))
+              .setScale(0, RoundingMode.UP);
+      var higherBound =
+          time.add(
+                  time.multiply(time)
+                      .subtract(BigDecimal.valueOf(4).multiply(distance))
+                      .sqrt(new MathContext(100)))
+              .divide(BigDecimal.valueOf(2))
+              .setScale(0, RoundingMode.DOWN);
       if (isNotRecord(race, lowerBound)) {
-        lowerBound++;
+        lowerBound = lowerBound.add(BigDecimal.ONE);
       }
       if (isNotRecord(race, higherBound)) {
-        higherBound--;
+        higherBound = higherBound.subtract(BigDecimal.ONE);
       }
 
-      var temp = higherBound - lowerBound + 1;
-      wayToWin.add(temp);
+      var temp = higherBound.subtract(lowerBound).add(BigDecimal.ONE);
+      wayToWin.add(temp.toBigInteger().longValue());
     }
     return wayToWin.stream().reduce(1L, (a, b) -> a * b);
   }
