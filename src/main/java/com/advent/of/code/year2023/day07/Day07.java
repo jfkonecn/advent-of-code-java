@@ -109,7 +109,11 @@ public class Day07 {
   }
 
   public static int Part1(List<String> input) {
-    var cards = input.stream().map(x -> parseHand(x)).collect(Collectors.toList());
+    var cards =
+        input.stream()
+            .map(x -> parseHand(x))
+            .map(x -> new Pair<>(determineHandType(x.cards()), x.bid()))
+            .collect(Collectors.toList());
     return -1;
   }
 
