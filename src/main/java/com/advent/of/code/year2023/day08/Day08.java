@@ -54,7 +54,32 @@ public class Day08 {
     return totalSteps;
   }
 
+  private static int TotalSteps(AdventMap map, String currentNode) {
+    var totalSteps = 0;
+    while (!currentNode.endsWith("Z")) {
+      for (var direction : map.directions) {
+        if (direction == Direction.LEFT) {
+          currentNode = map.nodeDic.get(currentNode).Left;
+        } else {
+          currentNode = map.nodeDic.get(currentNode).Right;
+        }
+        totalSteps++;
+      }
+    }
+    return totalSteps;
+  }
+
   public static int Part2(List<String> input) {
-    return -1;
+    var map = parseMap(input);
+    var nodesEndingWithA = map.nodeDic.keySet().stream().filter(x -> x.endsWith("A")).toList();
+
+    var maxSteps = 0;
+    for (var node : nodesEndingWithA) {
+      var totalSteps = TotalSteps(map, node);
+      if (totalSteps > 0) {
+        maxSteps = Math.max(maxSteps, totalSteps);
+      }
+    }
+    return maxSteps;
   }
 }

@@ -32,7 +32,7 @@ public class Day08Tests {
   @Test
   public void example2() throws IOException {
     List<String> lines = getExample3Text("year2023", "day08");
-    assertEquals(0, Day08.Part2(lines));
+    assertEquals(6, Day08.Part2(lines));
   }
 
   @Test
