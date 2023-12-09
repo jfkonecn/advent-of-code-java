@@ -2,7 +2,6 @@ package com.advent.of.code.year2023.day05;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.stream.Collectors;
@@ -101,6 +100,27 @@ public class Day05 {
     }
   }
 
+  private static Long convert(Long source, List<Converter> converters) {
+    for (var converter : converters) {
+      var converted = converter.tryConvert(source);
+      if (converted.isPresent()) {
+        return converted.getAsLong();
+      }
+    }
+    return source;
+  }
+
+  private static Long convert(Long source, SeedMap seedMap) {
+    source = convert(source, seedMap.seedToSoilConverters());
+    source = convert(source, seedMap.soilToFertilizerConverters());
+    source = convert(source, seedMap.fertilizerToWaterConverters());
+    source = convert(source, seedMap.waterToLightConverters());
+    source = convert(source, seedMap.lightToTemperatureConverters());
+    source = convert(source, seedMap.temperatureToHumidityConverters());
+    source = convert(source, seedMap.humidityToLocationConverters());
+    return source;
+  }
+
   public static long Part1(List<String> input) {
     var seedMap = parseSeedMap(input);
     var source = new ArrayList<>(seedMap.seeds());
@@ -116,22 +136,19 @@ public class Day05 {
 
   public static long Part2(List<String> input) {
     var seedMap = parseSeedMap(input);
-    var sourceSet = new HashSet<Long>();
+    var min = Long.MAX_VALUE;
+    var total = seedMap.seeds().size() / 2;
     for (int i = 0; i < seedMap.seeds().size(); i += 2) {
       var start = seedMap.seeds().get(i);
       var length = seedMap.seeds().get(i + 1) + start;
+      System.out.println("starting " + i + " of " + total);
       for (var j = start; j < length; j++) {
-        sourceSet.add(j);
+        var temp = convert(j, seedMap);
+        min = Math.min(temp, min);
       }
+      System.out.println("completed " + i + " of " + total);
+      System.out.println("min " + min);
     }
-    var source = new ArrayList<>(sourceSet);
-    convert(source, seedMap.seedToSoilConverters());
-    convert(source, seedMap.soilToFertilizerConverters());
-    convert(source, seedMap.fertilizerToWaterConverters());
-    convert(source, seedMap.waterToLightConverters());
-    convert(source, seedMap.lightToTemperatureConverters());
-    convert(source, seedMap.temperatureToHumidityConverters());
-    convert(source, seedMap.humidityToLocationConverters());
-    return source.stream().mapToLong(Long::longValue).min().getAsLong();
+    return min;
   }
 }
