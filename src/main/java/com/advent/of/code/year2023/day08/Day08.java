@@ -3,6 +3,7 @@ package com.advent.of.code.year2023.day08;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Day08 {
   enum Direction {
@@ -54,32 +55,28 @@ public class Day08 {
     return totalSteps;
   }
 
-  private static int TotalSteps(AdventMap map, String currentNode) {
+  public static int Part2(List<String> input) {
+    var map = parseMap(input);
+    var currentNodes =
+        map.nodeDic.keySet().stream().filter(x -> x.endsWith("A")).collect(Collectors.toList());
+
     var totalSteps = 0;
-    while (!currentNode.endsWith("Z")) {
+    var canContinue = true;
+    while (canContinue) {
       for (var direction : map.directions) {
-        if (direction == Direction.LEFT) {
-          currentNode = map.nodeDic.get(currentNode).Left;
-        } else {
-          currentNode = map.nodeDic.get(currentNode).Right;
+        for (int i = 0; i < currentNodes.size(); i++) {
+          var currentNode = currentNodes.get(i);
+          if (direction == Direction.LEFT) {
+            currentNode = map.nodeDic.get(currentNode).Left;
+          } else {
+            currentNode = map.nodeDic.get(currentNode).Right;
+          }
+          currentNodes.set(i, currentNode);
         }
+        canContinue = !currentNodes.stream().allMatch(x -> x.endsWith("Z"));
         totalSteps++;
       }
     }
     return totalSteps;
-  }
-
-  public static int Part2(List<String> input) {
-    var map = parseMap(input);
-    var nodesEndingWithA = map.nodeDic.keySet().stream().filter(x -> x.endsWith("A")).toList();
-
-    var maxSteps = 0;
-    for (var node : nodesEndingWithA) {
-      var totalSteps = TotalSteps(map, node);
-      if (totalSteps > 0) {
-        maxSteps = Math.max(maxSteps, totalSteps);
-      }
-    }
-    return maxSteps;
   }
 }
