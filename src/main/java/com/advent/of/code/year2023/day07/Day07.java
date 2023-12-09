@@ -1,40 +1,12 @@
 package com.advent.of.code.year2023.day07;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day07 {
-  private record Pair<T, S>(T first, S second) {}
-
-  private enum Card {
-    TWO,
-    THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT,
-    NINE,
-    TEN,
-    JACK,
-    QUEEN,
-    KING,
-    ACE
-  }
-
-  private enum HandType {
-    HIGH_CARD,
-    ONE_PAIR,
-    TWO_PAIRS,
-    THREE_OF_A_KIND,
-    FULL_HOUSE,
-    FOUR_OF_A_KIND,
-    FIVE_OF_A_KIND,
-  }
-
-  private record Hand(List<Card> cards, int bid) {}
 
   private static List<Card> parseCards(String input) {
     var cards = new ArrayList<Card>();
@@ -111,13 +83,72 @@ public class Day07 {
   public static int Part1(List<String> input) {
     var cards =
         input.stream()
-            .map(x -> parseHand(x))
-            .map(x -> new Pair<>(determineHandType(x.cards()), x.bid()))
+            .map(
+                x -> {
+                  var handType = parseHand(x);
+                  return new TotalHand(determineHandType(handType.cards()), handType);
+                })
+            .sorted(new TotalHandComparator())
             .collect(Collectors.toList());
-    return -1;
+    var answer = 0;
+    for (int i = 0; i < cards.size(); i++) {
+      var card = cards.get(i);
+      answer += card.hand().bid() * (i + 1);
+    }
+    return answer;
   }
 
   public static int Part2(List<String> input) {
     return -1;
+  }
+}
+
+record Pair<T, S>(T first, S second) {}
+
+enum Card {
+  TWO,
+  THREE,
+  FOUR,
+  FIVE,
+  SIX,
+  SEVEN,
+  EIGHT,
+  NINE,
+  TEN,
+  JACK,
+  QUEEN,
+  KING,
+  ACE
+}
+
+enum HandType {
+  HIGH_CARD,
+  ONE_PAIR,
+  TWO_PAIRS,
+  THREE_OF_A_KIND,
+  FULL_HOUSE,
+  FOUR_OF_A_KIND,
+  FIVE_OF_A_KIND,
+}
+
+record Hand(List<Card> cards, int bid) {}
+
+record TotalHand(HandType handType, Hand hand) {}
+
+class TotalHandComparator implements Comparator<TotalHand> {
+  @Override
+  public int compare(TotalHand a, TotalHand b) {
+    if (a.handType() != b.handType()) {
+      return a.handType().compareTo(b.handType());
+    } else {
+      for (int i = 0; i < a.hand().cards().size(); i++) {
+        var cardA = a.hand().cards().get(i);
+        var cardB = b.hand().cards().get(i);
+        if (cardA != cardB) {
+          return cardA.compareTo(cardB);
+        }
+      }
+    }
+    return 0;
   }
 }
