@@ -12,24 +12,25 @@ public class Day06Tests {
   @Test
   public void example1() throws IOException {
     List<String> lines = getExampleText("year2023", "day06");
-    assertEquals(288, Day06.Part1(lines));
+    assertEquals(288L, Day06.Part1(lines));
   }
 
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("year2023", "day06");
-    assertEquals(2344708, Day06.Part1(lines));
+    assertEquals(2344708L, Day06.Part1(lines));
   }
 
   @Test
   public void example2() throws IOException {
     List<String> lines = getExampleText("year2023", "day06");
-    assertEquals(71503, Day06.Part2(lines));
+    assertEquals(71503L, Day06.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day06");
-    assertEquals(0, Day06.Part2(lines));
+    // TODO: make big integer
+    assertEquals(30125202L, Day06.Part2(lines));
   }
 }
