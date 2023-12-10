@@ -4,6 +4,7 @@ import static com.advent.of.code.Helpers.getExample2Text;
 import static com.advent.of.code.Helpers.getExample3Text;
 import static com.advent.of.code.Helpers.getExample4Text;
 import static com.advent.of.code.Helpers.getExample5Text;
+import static com.advent.of.code.Helpers.getExample6Text;
 import static com.advent.of.code.Helpers.getExampleText;
 import static com.advent.of.code.Helpers.getRealText;
 import static org.junit.Assert.assertEquals;
@@ -50,8 +51,15 @@ public class Day10Tests {
   }
 
   @Test
+  public void example2d() throws IOException {
+    List<String> lines = getExample6Text("year2023", "day10");
+    assertEquals(4, Day10.Part2(lines));
+  }
+
+  @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day10");
+    // 34 is wrong
     assertEquals(0, Day10.Part2(lines));
   }
 }
