@@ -143,18 +143,45 @@ public class Day10 {
         } else if (j > 0 && (grid[i][j - 1] == 'O' || grid[i][j - 1] == 'I')) {
           grid[i][j] = grid[i][j - 1];
         } else {
-          var totalVerticalPipes = 0;
-          for (int k = 0; k < j; k++) {
-            if (grid[i][k] == '|') {
-              totalVerticalPipes++;
-            }
-          }
-          grid[i][j] = totalVerticalPipes % 2 == 0 ? 'O' : 'I';
+          var leftIsEven = verticalIsEven(grid, 0, j - 1, i);
+          var rightIsEven = verticalIsEven(grid, j + 1, input.get(i).length() - 1, i);
+          var topIsEven = horizontalIsEven(grid, 0, i - 1, j);
+          var bottomIsEven = horizontalIsEven(grid, i + 1, input.size() - 1, j);
+          grid[i][j] = leftIsEven || rightIsEven || topIsEven || bottomIsEven ? 'O' : 'I';
         }
       }
     }
     printGrid(input, grid);
-    return -1;
+    var totalIs = 0;
+    for (int i = 0; i < input.size(); i++) {
+      for (int j = 0; j < input.get(i).length(); j++) {
+        if (grid[i][j] == 'I') {
+          totalIs++;
+        }
+      }
+    }
+    return totalIs;
+  }
+
+  private static Boolean horizontalIsEven(
+      char[][] grid, int startRowIdx, int endRowIdx, int colIdx) {
+    var totalHorizontalPipes = 0;
+    for (int k = startRowIdx; k <= endRowIdx; k++) {
+      if (grid[k][colIdx] == '-') {
+        totalHorizontalPipes++;
+      }
+    }
+    return totalHorizontalPipes % 2 == 0;
+  }
+
+  private static Boolean verticalIsEven(char[][] grid, int startColIdx, int endColIdx, int rowIdx) {
+    var totalVerticalPipes = 0;
+    for (int k = startColIdx; k <= endColIdx; k++) {
+      if (grid[rowIdx][k] == '|') {
+        totalVerticalPipes++;
+      }
+    }
+    return totalVerticalPipes % 2 == 0;
   }
 
   private static void printGrid(List<String> input, char[][] grid) {
