@@ -225,7 +225,7 @@ public class Day10 {
           k++;
         } while (k < endColIdx && grid[rowIdx][k] == '-');
         c = grid[rowIdx][k];
-        if (c == 'F') {
+        if (c == 'L') {
           totalVerticalPipes++;
         }
       } else if (c == 'F') {
@@ -233,7 +233,7 @@ public class Day10 {
           k++;
         } while (k < endColIdx && grid[rowIdx][k] == '-');
         c = grid[rowIdx][k];
-        if (c == '7') {
+        if (c == 'J') {
           totalVerticalPipes++;
         }
       } else if (c == 'L') {
@@ -241,7 +241,7 @@ public class Day10 {
           k++;
         } while (k < endColIdx && grid[rowIdx][k] == '-');
         c = grid[rowIdx][k];
-        if (c == 'J') {
+        if (c == '7') {
           totalVerticalPipes++;
         }
       } else if (c == 'J') {
@@ -249,7 +249,7 @@ public class Day10 {
           k++;
         } while (k < endColIdx && grid[rowIdx][k] == '-');
         c = grid[rowIdx][k];
-        if (c == 'L') {
+        if (c == 'F') {
           totalVerticalPipes++;
         }
       }
