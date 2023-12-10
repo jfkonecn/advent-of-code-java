@@ -59,7 +59,6 @@ public class Day10Tests {
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day10");
-    // 388 is too low
-    assertEquals(0, Day10.Part2(lines));
+    assertEquals(407, Day10.Part2(lines));
   }
 }

@@ -11,11 +11,13 @@ public class Day10 {
 
   private record GraphNode(Point point, List<Point> neighbors) {}
 
-  private record Graph(HashMap<Point, GraphNode> nodes, GraphNode startingPoint) {}
+  private record Graph(
+      HashMap<Point, GraphNode> nodes, GraphNode startingPoint, char startingPointChar) {}
 
   private static Graph ParseInput(List<String> input) {
     var nodes = new HashMap<Point, GraphNode>();
     GraphNode startingNode = null;
+    var startingPointChar = ' ';
     for (int i = 0; i < input.size(); i++) {
       String line = input.get(i);
       for (int j = 0; j < line.length(); j++) {
@@ -63,29 +65,52 @@ public class Day10 {
           // show what shape the pipe has
           var neighbors = new ArrayList<Point>();
 
+          var hasNorth = false;
+          var hasSouth = false;
+          var hasEast = false;
+          var hasWest = false;
           if (i > 0) {
             char north = input.get(i - 1).charAt(j);
             if (north == '|' || north == '7' || north == 'F') {
               neighbors.add(new Point(i - 1, j));
+              hasNorth = true;
             }
           }
           if (i < input.size() - 1) {
             char south = input.get(i + 1).charAt(j);
             if (south == '|' || south == 'L' || south == 'J') {
               neighbors.add(new Point(i + 1, j));
+              hasSouth = true;
             }
           }
           if (j < input.get(i).length() - 1) {
             char east = input.get(i).charAt(j + 1);
             if (east == '-' || east == 'L' || east == 'F') {
               neighbors.add(new Point(i, j + 1));
+              hasEast = true;
             }
           }
           if (j > 0) {
             char west = input.get(i).charAt(j - 1);
             if (west == '-' || west == 'J' || west == '7') {
               neighbors.add(new Point(i, j - 1));
+              hasWest = true;
             }
+          }
+          if (hasNorth && hasSouth) {
+            startingPointChar = '|';
+          } else if (hasEast && hasWest) {
+            startingPointChar = '-';
+          } else if (hasNorth && hasEast) {
+            startingPointChar = 'L';
+          } else if (hasNorth && hasWest) {
+            startingPointChar = 'J';
+          } else if (hasSouth && hasEast) {
+            startingPointChar = 'F';
+          } else if (hasSouth && hasWest) {
+            startingPointChar = '7';
+          } else {
+            throw new RuntimeException("Unexpected starting point: " + c);
           }
           startingNode = new GraphNode(new Point(i, j), neighbors);
           nodes.put(startingNode.point(), startingNode);
@@ -94,7 +119,7 @@ public class Day10 {
         }
       }
     }
-    return new Graph(nodes, startingNode);
+    return new Graph(nodes, startingNode, startingPointChar);
   }
 
   public static int Part1(List<String> input) {
@@ -129,7 +154,12 @@ public class Day10 {
     for (int i = 0; i < input.size(); i++) {
       for (int j = 0; j < input.get(i).length(); j++) {
         if (path.contains(new Point(i, j))) {
-          grid[i][j] = input.get(i).charAt(j);
+          var c = input.get(i).charAt(j);
+          if (c == 'S') {
+            grid[i][j] = graph.startingPointChar();
+          } else {
+            grid[i][j] = c;
+          }
         } else {
           grid[i][j] = '.';
         }
@@ -137,20 +167,16 @@ public class Day10 {
     }
     printGrid(input, grid);
     for (int i = 0; i < input.size(); i++) {
+      var isContained = false;
       for (int j = 0; j < input.get(i).length(); j++) {
-        if (grid[i][j] != '.') {
-          continue;
-        } else if (j > 0 && (grid[i][j - 1] == 'O' || grid[i][j - 1] == 'I')) {
-          grid[i][j] = grid[i][j - 1];
-        } else {
-          if (i == 3 && j == 14) {
-            System.out.println("here");
+        if (grid[i][j] == '.') {
+          if (isContained) {
+            grid[i][j] = 'I';
+          } else {
+            grid[i][j] = 'O';
           }
-          var leftIsEven = verticalIsEven(grid, 0, j - 1, i);
-          var rightIsEven = verticalIsEven(grid, j + 1, input.get(i).length() - 1, i);
-          var topIsEven = horizontalIsEven(grid, 0, i - 1, j);
-          var bottomIsEven = horizontalIsEven(grid, i + 1, input.size() - 1, j);
-          grid[i][j] = leftIsEven || rightIsEven || topIsEven || bottomIsEven ? 'O' : 'I';
+        } else if (grid[i][j] == '|' || grid[i][j] == 'L' || grid[i][j] == 'J') {
+          isContained = !isContained;
         }
       }
     }
@@ -168,93 +194,6 @@ public class Day10 {
       }
     }
     return totalIs;
-  }
-
-  private static Boolean horizontalIsEven(
-      char[][] grid, int startRowIdx, int endRowIdx, int colIdx) {
-    var totalHorizontalPipes = 0;
-    for (int k = startRowIdx; k <= endRowIdx; k++) {
-      var c = grid[k][colIdx];
-      if (c == '-') {
-        totalHorizontalPipes++;
-      } else if (c == '7') {
-        do {
-          k++;
-        } while (k < endRowIdx && grid[k][colIdx] == '|');
-        c = grid[k][colIdx];
-        if (c == 'L') {
-          totalHorizontalPipes++;
-        }
-      } else if (c == 'F') {
-        do {
-          k++;
-        } while (k < endRowIdx && grid[k][colIdx] == '|');
-        c = grid[k][colIdx];
-        if (c == 'J') {
-          totalHorizontalPipes++;
-        }
-      } else if (c == 'L') {
-        do {
-          k++;
-        } while (k < endRowIdx && grid[k][colIdx] == '|');
-        c = grid[k][colIdx];
-        if (c == '7') {
-          totalHorizontalPipes++;
-        }
-      } else if (c == 'J') {
-        do {
-          k++;
-        } while (k < endRowIdx && grid[k][colIdx] == '|');
-        c = grid[k][colIdx];
-        if (c == 'F') {
-          totalHorizontalPipes++;
-        }
-      }
-    }
-    return totalHorizontalPipes % 2 == 0;
-  }
-
-  private static Boolean verticalIsEven(char[][] grid, int startColIdx, int endColIdx, int rowIdx) {
-    var totalVerticalPipes = 0;
-    for (int k = startColIdx; k <= endColIdx; k++) {
-      var c = grid[rowIdx][k];
-      if (c == '|') {
-        totalVerticalPipes++;
-      } else if (c == '7') {
-        do {
-          k++;
-        } while (k < endColIdx && grid[rowIdx][k] == '-');
-        c = grid[rowIdx][k];
-        if (c == 'L') {
-          totalVerticalPipes++;
-        }
-      } else if (c == 'F') {
-        do {
-          k++;
-        } while (k < endColIdx && grid[rowIdx][k] == '-');
-        c = grid[rowIdx][k];
-        if (c == 'J') {
-          totalVerticalPipes++;
-        }
-      } else if (c == 'L') {
-        do {
-          k++;
-        } while (k < endColIdx && grid[rowIdx][k] == '-');
-        c = grid[rowIdx][k];
-        if (c == '7') {
-          totalVerticalPipes++;
-        }
-      } else if (c == 'J') {
-        do {
-          k++;
-        } while (k < endColIdx && grid[rowIdx][k] == '-');
-        c = grid[rowIdx][k];
-        if (c == 'F') {
-          totalVerticalPipes++;
-        }
-      }
-    }
-    return totalVerticalPipes % 2 == 0;
   }
 
   private static void printGrid(List<String> input, char[][] grid) {
