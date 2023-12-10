@@ -17,7 +17,7 @@ public class Day09 {
     return result;
   }
 
-  private static int solve(List<Integer> row) {
+  private static int solve1(List<Integer> row) {
     var cached = new int[row.size() + 1][row.size() + 1];
     for (int i = 0; i < row.size(); i++) {
       cached[0][i] = row.get(i);
@@ -41,13 +41,39 @@ public class Day09 {
     var rows = parseInput(input);
     var sum = 0;
     for (var row : rows) {
-      sum += solve(row);
+      sum += solve1(row);
     }
 
     return sum;
   }
 
+  private static int solve2(List<Integer> row) {
+    var cached = new int[row.size() + 1][row.size() + 1];
+    for (int i = 0; i < row.size(); i++) {
+      cached[0][i + 1] = row.get(i);
+    }
+
+    for (int i = 1; i <= row.size(); i++) {
+      for (int j = 1; j <= row.size() - i; j++) {
+        cached[i][j] = cached[i - 1][j + 1] - cached[i - 1][j];
+      }
+    }
+
+    for (int i = row.size(); i > 0; i--) {
+      var firstIdx = 0;
+      cached[i - 1][firstIdx] = cached[i - 1][firstIdx + 1] - cached[i][firstIdx];
+    }
+
+    return cached[0][row.size()];
+  }
+
   public static int Part2(List<String> input) {
-    return -1;
+    var rows = parseInput(input);
+    var sum = 0;
+    for (var row : rows) {
+      sum += solve2(row);
+    }
+
+    return sum;
   }
 }
