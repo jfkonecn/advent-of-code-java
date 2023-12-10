@@ -29,9 +29,21 @@ public class Day10Tests {
   }
 
   @Test
-  public void example2() throws IOException {
+  public void example2a() throws IOException {
     List<String> lines = getExampleText("year2023", "day10");
-    assertEquals(0, Day10.Part2(lines));
+    assertEquals(4, Day10.Part2(lines));
+  }
+
+  @Test
+  public void example2b() throws IOException {
+    List<String> lines = getExampleText("year2023", "day10");
+    assertEquals(8, Day10.Part2(lines));
+  }
+
+  @Test
+  public void example2c() throws IOException {
+    List<String> lines = getExampleText("year2023", "day10");
+    assertEquals(10, Day10.Part2(lines));
   }
 
   @Test

@@ -25,4 +25,14 @@ public class Helpers {
 
     return Files.readAllLines(Paths.get("target", "test-classes", year, day, "example3.txt"));
   }
+
+  public static List<String> getExample4Text(String year, String day) throws IOException {
+
+    return Files.readAllLines(Paths.get("target", "test-classes", year, day, "example4.txt"));
+  }
+
+  public static List<String> getExample5Text(String year, String day) throws IOException {
+
+    return Files.readAllLines(Paths.get("target", "test-classes", year, day, "example5.txt"));
+  }
 }
