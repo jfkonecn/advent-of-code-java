@@ -129,7 +129,7 @@ public class Day10 {
     for (int i = 0; i < input.size(); i++) {
       for (int j = 0; j < input.get(i).length(); j++) {
         if (path.contains(new Point(i, j))) {
-          grid[i][j] = 'X';
+          grid[i][j] = input.get(i).charAt(j);
         } else {
           grid[i][j] = '.';
         }
@@ -138,18 +138,18 @@ public class Day10 {
     printGrid(input, grid);
     for (int i = 0; i < input.size(); i++) {
       for (int j = 0; j < input.get(i).length(); j++) {
-        if (grid[i][j] == 'X') {
+        if (grid[i][j] != '.') {
           continue;
-        } else if (j > 0 && grid[i][j - 1] != 'X') {
+        } else if (j > 0 && (grid[i][j - 1] == 'O' || grid[i][j - 1] == 'I')) {
           grid[i][j] = grid[i][j - 1];
         } else {
-          var totalXs = 0;
+          var totalVerticalPipes = 0;
           for (int k = 0; k < j; k++) {
-            if (grid[i][k] == 'X') {
-              totalXs++;
+            if (grid[i][k] == '|') {
+              totalVerticalPipes++;
             }
           }
-          grid[i][j] = totalXs % 2 == 0 ? 'O' : 'I';
+          grid[i][j] = totalVerticalPipes % 2 == 0 ? 'O' : 'I';
         }
       }
     }
