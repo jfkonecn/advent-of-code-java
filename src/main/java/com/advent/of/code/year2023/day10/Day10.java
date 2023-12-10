@@ -98,7 +98,23 @@ public class Day10 {
 
   public static int Part1(List<String> input) {
     var graph = ParseInput(input);
-    return -1;
+    // loop through the graph, starting at the starting point until we reach the starting point
+    var steps = 0;
+    var currentNode = graph.startingPoint();
+    var previousNode = currentNode;
+    do {
+      var neighbors = currentNode.neighbors();
+      for (var neighbor : neighbors) {
+        if (neighbor.equals(previousNode.point())) {
+          continue;
+        }
+        previousNode = currentNode;
+        currentNode = graph.nodes().get(neighbor);
+        steps++;
+        break;
+      }
+    } while (currentNode != graph.startingPoint());
+    return steps / 2;
   }
 
   public static int Part2(List<String> input) {
