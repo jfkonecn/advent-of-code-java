@@ -2,6 +2,7 @@ package com.advent.of.code.year2023.day10;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Day10 {
@@ -98,8 +99,12 @@ public class Day10 {
 
   public static int Part1(List<String> input) {
     var graph = ParseInput(input);
-    // loop through the graph, starting at the starting point until we reach the starting point
-    var steps = 0;
+    var steps = getPath(graph).size();
+    return steps / 2;
+  }
+
+  private static HashSet<Point> getPath(Graph graph) {
+    var path = new HashSet<Point>();
     var currentNode = graph.startingPoint();
     var previousNode = currentNode;
     do {
@@ -110,11 +115,11 @@ public class Day10 {
         }
         previousNode = currentNode;
         currentNode = graph.nodes().get(neighbor);
-        steps++;
+        path.add(currentNode.point());
         break;
       }
     } while (currentNode != graph.startingPoint());
-    return steps / 2;
+    return path;
   }
 
   public static int Part2(List<String> input) {
