@@ -13,13 +13,13 @@ public class Day09Tests {
   @Test
   public void example1() throws IOException {
     List<String> lines = getExampleText("year2023", "day09");
-    assertEquals(0, Day09.Part1(lines));
+    assertEquals(114, Day09.Part1(lines));
   }
 
   @Test
   public void real1() throws IOException {
     List<String> lines = getRealText("year2023", "day09");
-    assertEquals(0, Day09.Part1(lines));
+    assertEquals(1806615041, Day09.Part1(lines));
   }
 
   @Test
