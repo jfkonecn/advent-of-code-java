@@ -1,6 +1,7 @@
 package com.advent.of.code.year2023.day09;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Day09 {
@@ -48,20 +49,21 @@ public class Day09 {
   }
 
   private static int solve2(List<Integer> row) {
+    Collections.reverse(row);
     var cached = new int[row.size() + 1][row.size() + 1];
     for (int i = 0; i < row.size(); i++) {
-      cached[0][i + 1] = row.get(i);
+      cached[0][i] = row.get(i);
     }
 
     for (int i = 1; i <= row.size(); i++) {
-      for (int j = 1; j <= row.size() - i; j++) {
-        cached[i][j] = cached[i - 1][j + 1] - cached[i - 1][j];
+      for (int j = i; j < row.size(); j++) {
+        cached[i][j] = cached[i - 1][j - 1] - cached[i - 1][j];
       }
     }
 
     for (int i = row.size(); i > 0; i--) {
-      var firstIdx = 0;
-      cached[i - 1][firstIdx] = cached[i - 1][firstIdx + 1] - cached[i][firstIdx];
+      var lastIdx = row.size();
+      cached[i - 1][lastIdx] = cached[i - 1][lastIdx - 1] - cached[i][lastIdx];
     }
 
     return cached[0][row.size()];

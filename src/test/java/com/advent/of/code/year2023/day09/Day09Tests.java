@@ -24,13 +24,12 @@ public class Day09Tests {
   @Test
   public void example2() throws IOException {
     List<String> lines = getExampleText("year2023", "day09");
-    assertEquals(81, Day09.Part2(lines));
+    assertEquals(2, Day09.Part2(lines));
   }
 
   @Test
   public void real2() throws IOException {
     List<String> lines = getRealText("year2023", "day09");
-    // 958478422 too high
-    assertEquals(0, Day09.Part2(lines));
+    assertEquals(1211, Day09.Part2(lines));
   }
 }
