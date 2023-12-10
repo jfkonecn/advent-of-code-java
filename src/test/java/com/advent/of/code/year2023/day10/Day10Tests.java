@@ -1,6 +1,9 @@
 package com.advent.of.code.year2023.day10;
 
 import static com.advent.of.code.Helpers.getExample2Text;
+import static com.advent.of.code.Helpers.getExample3Text;
+import static com.advent.of.code.Helpers.getExample4Text;
+import static com.advent.of.code.Helpers.getExample5Text;
 import static com.advent.of.code.Helpers.getExampleText;
 import static com.advent.of.code.Helpers.getRealText;
 import static org.junit.Assert.assertEquals;
@@ -30,19 +33,19 @@ public class Day10Tests {
 
   @Test
   public void example2a() throws IOException {
-    List<String> lines = getExampleText("year2023", "day10");
+    List<String> lines = getExample3Text("year2023", "day10");
     assertEquals(4, Day10.Part2(lines));
   }
 
   @Test
   public void example2b() throws IOException {
-    List<String> lines = getExampleText("year2023", "day10");
+    List<String> lines = getExample4Text("year2023", "day10");
     assertEquals(8, Day10.Part2(lines));
   }
 
   @Test
   public void example2c() throws IOException {
-    List<String> lines = getExampleText("year2023", "day10");
+    List<String> lines = getExample5Text("year2023", "day10");
     assertEquals(10, Day10.Part2(lines));
   }
 

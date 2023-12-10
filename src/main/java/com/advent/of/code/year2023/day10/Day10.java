@@ -123,6 +123,46 @@ public class Day10 {
   }
 
   public static int Part2(List<String> input) {
+    var graph = ParseInput(input);
+    var path = getPath(graph);
+    var grid = new char[input.size()][input.get(0).length()];
+    for (int i = 0; i < input.size(); i++) {
+      for (int j = 0; j < input.get(i).length(); j++) {
+        if (path.contains(new Point(i, j))) {
+          grid[i][j] = 'X';
+        } else {
+          grid[i][j] = '.';
+        }
+      }
+    }
+    printGrid(input, grid);
+    for (int i = 0; i < input.size(); i++) {
+      for (int j = 0; j < input.get(i).length(); j++) {
+        if (grid[i][j] == 'X') {
+          continue;
+        } else if (j > 0 && grid[i][j - 1] != 'X') {
+          grid[i][j] = grid[i][j - 1];
+        } else {
+          var totalXs = 0;
+          for (int k = 0; k < j; k++) {
+            if (grid[i][k] == 'X') {
+              totalXs++;
+            }
+          }
+          grid[i][j] = totalXs % 2 == 0 ? 'O' : 'I';
+        }
+      }
+    }
+    printGrid(input, grid);
     return -1;
+  }
+
+  private static void printGrid(List<String> input, char[][] grid) {
+    for (int i = 0; i < input.size(); i++) {
+      for (int j = 0; j < input.get(i).length(); j++) {
+        System.out.print(grid[i][j]);
+      }
+      System.out.println();
+    }
   }
 }
