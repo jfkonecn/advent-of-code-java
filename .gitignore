@@ -18,3 +18,5 @@ buildNumber.properties
 .classpath
 
 .settings/
+.nvim.lua
+.vscode/
